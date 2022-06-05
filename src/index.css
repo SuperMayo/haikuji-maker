@@ -1,0 +1,22 @@
+:root {
+  --emoji-margin-x: 0.3rem;
+  --emoji-margin-y: 0.3rem;
+  --emoji-size: 25px;
+  --bg-color: rgba(244, 236, 245, 0.9);
+  --bg-color-to: rgba(244, 236, 245, 0.9);
+  --gradient-angle: 45deg;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
