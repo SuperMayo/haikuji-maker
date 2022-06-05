@@ -95,5 +95,5 @@ button img:hover {
 
 .twemoji {
   width: var(--emoji-size);
-  margin: var(--emoji-margin-y) var(--emoji-margin-y);
+  margin: var(--emoji-margin-y) var(--emoji-margin-x);
 }
