@@ -5,11 +5,31 @@ import { Editor } from "@tinymce/tinymce-react";
 import MD5 from "crypto-js/md5";
 import ColorPicker from './ColorPicker';
 import Parameters from './Parameters';
+import styled from 'styled-components';
 import './App.css'
+import Noise from './noise.svg'
+
+
+const rgbToString = (c) => {
+    return("rgba(" + c. r + "," + c.g + "," + c.b + "," + c.a + ")")
+}
+
+const Haikuji = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 250px;
+  filter: contrast(100%) brightness(100%);
+  background: linear-gradient(${props => props.angle}deg, ${props => rgbToString(props.color[0])}, ${props => rgbToString(props.color[1])}), url(${Noise});
+`;
 
 function App() {
   const [haiku, setHaiku] = useState("")
-  const [color, setColor] = useState("rgba(234, 244, 243, 0.9)")
+  const [color, setColor] = useState([{r:27, g:1, b:155, a:0.5},{r:27, g:1, b:155, a:0.5}])
+  const [colorContext, setColorContext] = useState([true, true])
+  const [angle, setAngle] = useState(45)
   const [showPicker, setShowPicker] = useState(false)
   const [showParameters, setShowParameters] = useState(false)
   const [parameters, setParameters] = useState(
@@ -19,12 +39,25 @@ function App() {
       {var: "--emoji-size", default: "25", value: "25", unit: "px"},
     ]
   )
-  
+
   const handleColorChange = (c) => {
-    setColor(c.rgb)
-    const newc = "rgba(" + c.rgb.r + "," + c.rgb.g + "," + c.rgb.b + "," + c.rgb.a + ")"
-    console.log(newc)
-    document.documentElement.style.setProperty("--bg-color", newc)
+    let colorVector = [...color];
+    colorContext.forEach((isContext, index) => {
+      if(isContext){
+        colorVector[index] = c.rgb;
+      }
+    })
+    setColor(colorVector);
+  }
+
+  const handleContextChange = (id) => {
+    let newContext = [...colorContext];
+    newContext[id] = !colorContext[id];
+    setColorContext(newContext);
+  }
+
+  const handleAngleChange = (e) => {
+    setAngle(e.currentTarget.value);
   }
   
   const onTogglePicker = () => setShowPicker(!showPicker)
@@ -88,27 +121,35 @@ function App() {
 
         <Twemoji options={{ className: 'twemoji', ext: '.svg', folder: 'svg' }}>
           <div className = "container">
-            <div id="haiku" 
-              ref={ref} 
-              // style={{backgroundColor: color}}
-              >
+            <Haikuji ref={ref} color={color} angle={angle} >
               <p dangerouslySetInnerHTML={{__html: haiku}}></p>
-            </div>
+            </Haikuji>
           </div>
         </Twemoji>
 
         <Twemoji>
-        <button onClick={onTogglePicker}>🎨</button>
-        { showPicker ? 
-        <ColorPicker color={color} handleColorChange={handleColorChange} style={{margin: "auto"}}/> 
-        : null }
-        <button onClick={onToggleParameters}>⚙️</button>
-        {showParameters ? 
-        <Parameters 
-          parameters={parameters} 
-          handleParameterChange={handleParameterChange}/>
-        : null}
-        <button onClick={onButtonClick}>💾</button>
+          <button onClick={onTogglePicker}>🎨</button>
+            { showPicker ? 
+            <div>
+              <ColorPicker 
+                color={color[colorContext.indexOf(true)]} 
+                handleColorChange={handleColorChange}
+                style={{margin: "auto"}}/> 
+              <div>
+                <input type="checkbox" value="0" defaultChecked={colorContext[0]} onChange={(e) => handleContextChange(0)}/> From
+                <input type="checkbox" value="1" defaultChecked={colorContext[1]} onChange={(e) => handleContextChange(1)}/> To
+              </div>
+          </div>
+            : null }
+          <button onClick={onToggleParameters}>⚙️</button>
+            {showParameters ? 
+            <Parameters 
+              parameters={parameters}
+              angle={angle}
+              handleAngleChange={handleAngleChange}
+              handleParameterChange={handleParameterChange}/>
+            : null}
+          <button onClick={onButtonClick}>💾</button>
         </Twemoji>
       </main>
     </div>

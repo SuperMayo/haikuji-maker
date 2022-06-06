@@ -1,7 +1,7 @@
 import { useState} from "react";
 
 
-const Parameters = ({parameters, handleParameterChange}) => {
+const Parameters = ({parameters, angle, handleAngleChange, handleParameterChange}) => {
     return(
         <div className="flex-col" style={{maxWidth: "200px"}}>
             <div className="flex-col">
@@ -36,6 +36,18 @@ const Parameters = ({parameters, handleParameterChange}) => {
                     defaultValue={parameters[2].default}
                     onChange = {(e) => handleParameterChange(2, e)}/>
             </div>
+            <div className="flex-col">
+                <label for="angle">Gradient angle: {angle}</label>
+                <input 
+                    type="range" 
+                    name="angle" 
+                    min="0" 
+                    max="360" 
+                    step="1" 
+                    defaultValue="45"
+                    onChange = {(e) => handleAngleChange(e)}/>
+            </div>
+
        </div>
     )
 }

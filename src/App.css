@@ -81,10 +81,6 @@ button img:hover {
   filter: contrast(100%) brightness(100%);
   background: linear-gradient(var(--gradient-angle), var(--bg-color), var(--bg-color)), url(noise.svg);
 }
-
-#haiku p {
-  margin: 0;
-}
   
 .color-picker {
   display: flex;
